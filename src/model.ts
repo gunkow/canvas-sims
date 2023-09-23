@@ -18,7 +18,7 @@ export class Particle {
     }
 }
   
-interface Simulation {
+export interface Simulation {
     dimensions: Vector2D;
     step(particles: Particle[]): Particle[];
 }
