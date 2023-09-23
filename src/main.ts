@@ -6,16 +6,19 @@ var canvas: HTMLCanvasElement;
 var ctx: CanvasRenderingContext2D;
 let width = window.innerWidth;
 let height = window.innerHeight;
+let spawnX = width / 2;
+let spawnY = height / 2;
 
 const sim = new CollisionSimulation({ x: width, y: height });
 let parts: Particle[] = [];
-// [
-//     new Particle({x: spawnX, y: spawnY}, {x: 1, y: 1}, 1, 10),
-//     new Particle({x: spawnX+15, y: spawnY+15}, {x: -1, y: -1}, 1, 10)
-// ].forEach(p => parts.push(p));
-for (let i = 0; i < 8000; i++) {
-    const pos = { x: Math.random() * 500, y: Math.random() * 500 };
-    const vel = { x: Math.random() * 20 - 5, y: Math.random() * 20 - 5 };
+[
+    new Particle({x: spawnX, y: spawnY}, {x: 1, y: 1}, 1, 10),
+    new Particle({x: spawnX+20, y: spawnY+20}, {x: -1, y: -1}, 1, 10)
+].forEach(p => parts.push(p));
+
+for (let i = 0; i < 5000; i++) {
+    const pos = { x: Math.random() * 300, y: Math.random() * 300 };
+    const vel = { x: Math.random() * 30 - 5, y: Math.random() * 30 - 5 };
     const mass = Math.random() * 1 + 1;
     const radius = mass ;
     parts.push(new Particle(pos, vel, mass, radius));
@@ -38,9 +41,9 @@ window.onload = () => {
     
     drawParts( ctx, canvas, sim, parts);
 
-    setInterval(() => {
-        console.log(parts);
-    }, 2000);
+    // setInterval(() => {
+    //     console.log(parts);
+    // }, 2000);
     
     
 

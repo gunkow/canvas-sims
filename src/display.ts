@@ -1,5 +1,7 @@
 import { Simulation, Particle} from './model';
 
+let time = 0;
+
 export function drawParts(ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement, sim: Simulation, parts: Particle[]) {
     function draw(t: number) {
         requestAnimationFrame(draw);
@@ -17,7 +19,9 @@ export function drawParts(ctx: CanvasRenderingContext2D, canvas: HTMLCanvasEleme
             ctx.fill();
             ctx.restore();
         });
-        console.log(`t: ${t}`);
+
+        console.log(`t: ${t - time}`);
+        time = t;
     }
     draw(0);   
 }
