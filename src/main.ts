@@ -12,14 +12,14 @@ let spawnY = height / 2;
 const sim = new CollisionSimulation({ x: width, y: height });
 let parts: Particle[] = [];
 [
-    new Particle({x: spawnX, y: spawnY}, {x: 1, y: 1}, 1, 10),
-    new Particle({x: spawnX+20, y: spawnY+20}, {x: -1, y: -1}, 1, 10)
+    new Particle({x: spawnX, y: spawnY}, {x: -10, y: -10}, 100, 20),
+    new Particle({x: spawnX+50, y: spawnY+50}, {x: -30, y: -20}, 100, 20)
 ].forEach(p => parts.push(p));
 
 for (let i = 0; i < 5000; i++) {
     const pos = { x: Math.random() * 300, y: Math.random() * 300 };
-    const vel = { x: Math.random() * 30 - 5, y: Math.random() * 30 - 5 };
-    const mass = Math.random() * 1 + 1;
+    const vel = { x: Math.random() * 220 - 5, y: Math.random() * 30 - 55 };
+    const mass = Math.random() * 3 + 1;
     const radius = mass ;
     parts.push(new Particle(pos, vel, mass, radius));
 }

@@ -26,6 +26,7 @@ export interface Simulation {
 export class CollisionSimulation implements Simulation {
     dimensions: Vector2D;
     delta_t: number = 1/70;
+    energy_loss: number = 0.5;
     constructor(dimensions: Vector2D) {
         this.dimensions = dimensions;
     }
@@ -33,12 +34,28 @@ export class CollisionSimulation implements Simulation {
     step(particles: Particle[]): Particle[] {
         for (let i = 0; i < particles.length; i++) {
             // Check collision with walls
-            if (particles[i].pos.x - particles[i].radius < 0 || particles[i].pos.x + particles[i].radius > this.dimensions.x) {
-                particles[i].vel.x = -particles[i].vel.x;
+            let particle = particles[i];
+            let leftBoundaryCollision = particle.pos.x - particle.radius < 0;
+            let rightBoundaryCollision = particle.pos.x + particle.radius > this.dimensions.x;
+            let topBoundaryCollision = particle.pos.y - particle.radius < 0;
+            let bottomBoundaryCollision = particle.pos.y + particle.radius > this.dimensions.y;
+            if (leftBoundaryCollision || rightBoundaryCollision) {
+                particle.vel.x = -particle.vel.x * this.energy_loss;
+                if (leftBoundaryCollision) {
+                    particle.pos.x = particle.radius;
+                } else if (rightBoundaryCollision) {
+                    particle.pos.x = this.dimensions.x - particle.radius;
+                }
             }
-            if (particles[i].pos.y - particles[i].radius < 0 || particles[i].pos.y + particles[i].radius > this.dimensions.y) {
-                particles[i].vel.y = -particles[i].vel.y;
+            if (topBoundaryCollision || bottomBoundaryCollision) {
+                particle.vel.y = -particle.vel.y * this.energy_loss;
+                if (topBoundaryCollision) {
+                    particle.pos.y = particle.radius;
+                } else if (bottomBoundaryCollision) {
+                    particle.pos.y = this.dimensions.y - particle.radius;
+                }
             }
+
 
             // Check collision with other particles
             for (let j = i + 1; j < particles.length; j++) {
@@ -71,9 +88,11 @@ export class CollisionSimulation implements Simulation {
                     particles[j].vel.y -= impulseVector.y / particles[j].mass;
                 }
             }
-            
+
+            const gravity = 500;            
             particles[i].pos.x += particles[i].vel.x * this.delta_t;
             particles[i].pos.y += particles[i].vel.y * this.delta_t;
+            particles[i].vel.y += gravity * this.delta_t;
         }
         return particles;
     }
